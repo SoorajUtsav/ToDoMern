@@ -31,4 +31,13 @@ const updateToDo = (
   });
 };
 
-export { getAllToDo, addToDo, updateToDo };
+const deleteToDo = (_id, setToDo) => {
+  axios
+    .delete(`${baseUrl}/delete`, { data: { _id } })
+    .then(() => {
+      getAllToDo(setToDo);
+    })
+    .catch((err) => console.log(err));
+};
+
+export { getAllToDo, addToDo, updateToDo, deleteToDo };
