@@ -9,9 +9,26 @@ const getAllToDo = (setToDo) => {
 };
 
 const addToDo = (text, setText, setToDo) => {
-  axios.post(`${baseUrl}/save`, { text }).then((data) => {
+  axios.post(`${baseUrl}/save`, { text }).then(() => {
     setText("");
     getAllToDo(setToDo);
   });
 };
-export { getAllToDo, addToDo };
+
+const updateToDo = (
+  _id,
+  text,
+  setText,
+  setToDo,
+  setIsUpdating,
+  setUpdateIds
+) => {
+  axios.post(`${baseUrl}/update`, { _id, text }).then(() => {
+    setText("");
+    setUpdateIds("");
+    setIsUpdating(false);
+    getAllToDo(setToDo);
+  });
+};
+
+export { getAllToDo, addToDo, updateToDo };

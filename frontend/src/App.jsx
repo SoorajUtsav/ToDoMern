@@ -1,10 +1,18 @@
 import ToDo from "./components/ToDo";
 import { useState, useEffect } from "react";
-import { addToDo, getAllToDo } from "./utils/HandleApi";
+import { addToDo, getAllToDo, updateToDo } from "./utils/HandleApi";
 
 function App() {
   const [toDos, setToDos] = useState([]);
   const [text, setText] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateId, setUpdateId] = useState("");
+
+  const updateMode = (id, text) => {
+    setIsUpdating(true);
+    setUpdateId(id);
+    setText(text);
+  };
 
   useEffect(() => {
     getAllToDo(setToDos);
@@ -25,14 +33,31 @@ function App() {
           />
           <button
             type="button"
-            onClick={() => addToDo(text, setText, setToDos)}
+            onClick={
+              isUpdating
+                ? () =>
+                    updateToDo(
+                      updateId,
+                      text,
+                      setText,
+                      setToDos,
+                      setIsUpdating,
+                      setUpdateId
+                    )
+                : () => addToDo(text, setText, setToDos)
+            }
           >
-            Add
+            {isUpdating ? "Update" : "Add"}
           </button>
         </div>
         <div>
           {toDos?.map((item, index) => (
-            <ToDo text={item?.text} key={index} />
+            <ToDo
+              text={item?.text}
+              key={index}
+              id={item?._id}
+              updateMode={updateMode}
+            />
           ))}
         </div>
       </div>
